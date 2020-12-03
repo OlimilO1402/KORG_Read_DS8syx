@@ -10,6 +10,44 @@ Begin VB.Form Form1
    OLEDropMode     =   1  'Manuell
    ScaleHeight     =   13455
    ScaleWidth      =   8640
+   Begin VB.TextBox Text1 
+      BeginProperty Font 
+         Name            =   "Courier New"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   12375
+      Left            =   120
+      MultiLine       =   -1  'True
+      OLEDragMode     =   1  'Automatisch
+      OLEDropMode     =   1  'Manuell
+      ScrollBars      =   3  'Beides
+      TabIndex        =   0
+      Text            =   "Form1.frx":0CCA
+      Top             =   840
+      Width           =   8415
+   End
+   Begin VB.ComboBox Combo1 
+      BeginProperty Font 
+         Name            =   "Courier New"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   360
+      Left            =   480
+      TabIndex        =   1
+      Text            =   "Combo1"
+      Top             =   480
+      Width           =   8055
+   End
    Begin VB.OptionButton OptClipB 
       Caption         =   "ClipBoard"
       Height          =   255
@@ -34,43 +72,12 @@ Begin VB.Form Form1
       Top             =   120
       Width           =   1215
    End
-   Begin VB.ComboBox Combo1 
-      BeginProperty Font 
-         Name            =   "Courier New"
-         Size            =   9.75
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   360
-      Left            =   480
-      TabIndex        =   1
-      Text            =   "Combo1"
-      Top             =   480
-      Width           =   8055
-   End
-   Begin VB.TextBox Text1 
-      BeginProperty Font 
-         Name            =   "Courier New"
-         Size            =   9.75
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   12375
-      Left            =   120
-      MultiLine       =   -1  'True
-      OLEDragMode     =   1  'Automatisch
-      OLEDropMode     =   1  'Manuell
-      ScrollBars      =   3  'Beides
-      TabIndex        =   0
-      Text            =   "Form1.frx":0CCA
-      Top             =   840
-      Width           =   8415
+   Begin VB.Image Image1 
+      Height          =   480
+      Left            =   8040
+      Picture         =   "Form1.frx":0CD0
+      Top             =   0
+      Width           =   480
    End
    Begin VB.Label Label2 
       Caption         =   "drag'drop *.syx files into the textbox"
@@ -78,7 +85,7 @@ Begin VB.Form Form1
       Left            =   4440
       TabIndex        =   6
       Top             =   120
-      Width           =   3375
+      Width           =   3135
    End
    Begin VB.Label Label1 
       BackColor       =   &H00FFFFFF&
@@ -276,6 +283,8 @@ End Sub
 Private Sub Form_Resize()
     Dim l As Single, T As Single, W As Single, H As Single
     Dim brdr As Single: brdr = 8 * Screen.TwipsPerPixelX
+    l = Me.ScaleWidth - brdr - Image1.Width
+    Image1.Move l, 0
     l = brdr: T = 4 * brdr: W = 3 * brdr: H = Combo1.Height
     If W > 0 And H > 0 Then Label1.Move l, T, W, H
     l = l + W: T = 4 * brdr
