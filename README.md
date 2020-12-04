@@ -9,4 +9,4 @@ correctly. So the program never made it to a syx-writer, but anymay, it helped
 me out to solve my DS-8-problems. If you love vintage gear like I do, you could 
 take this little project as a starting point for your own ideas. 
 
-![KDS8Reader Image](Resources\KDS8Reader.png "KDS8Reader Image")
+![KDS8Reader Image](Resources/KDS8Reader.png "KDS8Reader Image")
