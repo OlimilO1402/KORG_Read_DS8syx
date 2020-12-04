@@ -20,7 +20,7 @@ Begin VB.Form Form1
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   12375
+      Height          =   12615
       Left            =   120
       MultiLine       =   -1  'True
       OLEDragMode     =   1  'Automatisch
@@ -29,7 +29,7 @@ Begin VB.Form Form1
       TabIndex        =   0
       Text            =   "Form1.frx":0CCA
       Top             =   840
-      Width           =   8415
+      Width           =   8535
    End
    Begin VB.ComboBox Combo1 
       BeginProperty Font 
@@ -46,7 +46,7 @@ Begin VB.Form Form1
       TabIndex        =   1
       Text            =   "Combo1"
       Top             =   480
-      Width           =   8055
+      Width           =   8175
    End
    Begin VB.OptionButton OptClipB 
       Caption         =   "ClipBoard"
@@ -74,7 +74,7 @@ Begin VB.Form Form1
    End
    Begin VB.Image Image1 
       Height          =   480
-      Left            =   8040
+      Left            =   8160
       Picture         =   "Form1.frx":0CD0
       Top             =   0
       Width           =   480
@@ -283,17 +283,17 @@ End Sub
 Private Sub Form_Resize()
     Dim l As Single, T As Single, W As Single, H As Single
     Dim brdr As Single: brdr = 8 * Screen.TwipsPerPixelX
-    l = Me.ScaleWidth - brdr - Image1.Width
+    l = Me.ScaleWidth - Image1.Width
     Image1.Move l, 0
-    l = brdr: T = 4 * brdr: W = 3 * brdr: H = Combo1.Height
+    l = 0: T = 4 * brdr: W = 3 * brdr: H = Combo1.Height
     If W > 0 And H > 0 Then Label1.Move l, T, W, H
     l = l + W: T = 4 * brdr
-    W = Me.ScaleWidth - l - brdr: H = Combo1.Height
+    W = Me.ScaleWidth - l: H = Combo1.Height
     If W > 0 And H > 0 Then Combo1.Move l, T, W ', H
-    l = brdr
+    l = 0
     T = T + H + brdr
-    W = Me.ScaleWidth - l - brdr
-    H = Me.ScaleHeight - T - brdr
+    W = Me.ScaleWidth - l
+    H = Me.ScaleHeight - T
     If W > 0 And H > 0 Then Text1.Move l, T, W, H
 End Sub
 
