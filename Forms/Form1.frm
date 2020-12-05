@@ -82,10 +82,10 @@ Begin VB.Form Form1
    Begin VB.Label Label2 
       Caption         =   "drag'drop *.syx files into the textbox"
       Height          =   255
-      Left            =   4440
+      Left            =   4080
       TabIndex        =   6
       Top             =   120
-      Width           =   3135
+      Width           =   2655
    End
    Begin VB.Label Label1 
       BackColor       =   &H00FFFFFF&
@@ -124,11 +124,6 @@ End Sub
 Private Sub Combo1_Click()
     UpdateView
 End Sub
-
-Private Sub Command1_Click()
-    Shell "explorer.exe", vbNormalFocus
-End Sub
-
 'Private Sub Command2_Click()
 '    Dim aProg As KORG_DS8_PROG
 '    aProg = MKDS8Reader.List_Get_Item(Combo1.List(Combo1.ListIndex))
@@ -138,6 +133,14 @@ End Sub
 '    Text1.Text = Clipboard.GetText
 '    Clipboard.Clear
 '    Clipboard.SetText s
+'End Sub
+'Private Sub Command1_Click()
+'    m_FNm = App.Path & "\synthzone\B2.syx"
+'    OpenSyXFile m_FNm
+'End Sub
+'Private Sub Command2_Click()
+'    m_FNm = App.Path & "\synthzone\B3.syx"
+'    OpenSyXFile m_FNm
 'End Sub
 
 Private Sub Form_Load()
@@ -152,7 +155,7 @@ Private Sub Form_Load()
     '2012_11_26 om: OK, was man jetzt tun sollte:
     'mal die original ds8-syx-Datei aus dem Netz laden und schauen ob man wenigstens grob die richtigen Daten hat.
     'die Namen der Patches sind schonmal unterschiedlich -> Vermutung es sind andere, oder ein german-brand?
-    'Set m_sr = New_KDS8SyxReader(FNm)
+    'Set m_sr = MNew.KDS8SyxReader(FNm)
     If Len(Command) > 0 Then
         Dim FNm As String: FNm = Command
         If Left(FNm, 1) = """" Then FNm = Mid$(FNm, 2)
@@ -172,6 +175,8 @@ Private Sub ReadAll()
     End If
     
 try: On Error GoTo finally
+    
+    MKDS8Reader.List_Clear
     
     Dim aProg As KORG_DS8_PROG
     
@@ -199,12 +204,13 @@ Private Sub UpdateView()
     Dim i As Long: i = Combo1.ListIndex
     Label1.Caption = Format(i, "00")
     aProg = MKDS8Reader.List_Get_Item(Combo1.List(i))
+    'Debug.Print MKDS8Reader.List_Count
     Text1.Text = KORG_DS8_Prog_ToStr(aProg, GetFormat)
 End Sub
 Function GetFormat() As EFmt
     Select Case True
-    Case OptRows.value: GetFormat = EFmt.rowbased
-    Case OptCols.value: GetFormat = EFmt.vertical
+    Case OptRows.value:  GetFormat = EFmt.rowbased
+    Case OptCols.value:  GetFormat = EFmt.vertical
     Case OptClipB.value: GetFormat = EFmt.Clipboard
     Case Else: OptRows.value = True
     End Select
@@ -276,7 +282,9 @@ Private Sub OLEDragDrop(Data As DataObject, Effect As Long) ', Button As Integer
 End Sub
 Private Sub OpenSyXFile(ByVal FNm As String)
     m_FNm = FNm
-    Set m_sr = New_KDS8SyxReader(m_FNm)
+    m_IsHeadRead = False
+    m_Err = vbNullString
+    Set m_sr = MNew.KDS8SyxReader(m_FNm)
     ReadAll
     UpdateView
 End Sub

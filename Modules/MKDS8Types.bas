@@ -238,7 +238,7 @@ Public Type ListOf_KORG_DS8_PROG
     Count As Long
     Arr() As KORG_DS8_PROG
 End Type
-
+Public ListOf_KORG_DS8_PROG_Empty As ListOf_KORG_DS8_PROG
 Public Type KORG_DS8_KOMBI
     '
     Dummy_Value As Long
@@ -248,4 +248,5 @@ Public Type ListOf_KORG_DS8_KOMB
     Count As Long
     Arr() As KORG_DS8_KOMBI
 End Type
+Public ListOf_KORG_DS8_KOMB_Empty As ListOf_KORG_DS8_KOMB
 

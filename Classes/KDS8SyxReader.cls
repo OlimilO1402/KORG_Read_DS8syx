@@ -66,7 +66,7 @@ Public Function ReadByte() As Byte
         If ((Seek(m_FNr) - m_FOffset) Mod 8) = 0 Then
             Get m_FNr, , b
             m_LastSkippedByte = b
-            Debug.Print "&H" & Hex(b)
+            'Debug.Print "&H" & Hex(b)
         End If
     End If
 End Function

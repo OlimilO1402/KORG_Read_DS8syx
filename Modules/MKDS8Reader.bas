@@ -6,6 +6,13 @@ Public Const ID_KORG_DS8 As Byte = &H13
 
 Public KORG_DS8_PROGS As ListOf_KORG_DS8_PROG
 
+Public Sub List_Clear()
+    KORG_DS8_PROGS = ListOf_KORG_DS8_PROG_Empty
+End Sub
+Public Property Get List_Count() As Long
+    List_Count = KORG_DS8_PROGS.Count
+End Property
+
 Public Sub List_Add_KORG_DS8_PROG(aKORG_DS8_PROG As KORG_DS8_PROG)
     With KORG_DS8_PROGS
         If .Count = 0 Then
@@ -22,6 +29,7 @@ Public Sub List_Add_KORG_DS8_PROG(aKORG_DS8_PROG As KORG_DS8_PROG)
 End Sub
 Public Sub List_ToComboBox(aCmb As ComboBox)
     Dim i As Long
+    aCmb.Clear
     With KORG_DS8_PROGS
         For i = 0 To .Count - 1
             aCmb.AddItem .Arr(i).VOICENAME.name
@@ -103,7 +111,7 @@ End Function
 '    End With
 'End Function
 Public Function ReadT_EG12(ByVal sr As KDS8SyxReader) As T_EG12
-    Debug.Print "T_EG1"
+    'Debug.Print "T_EG1"
     Dim b As Byte
     With ReadT_EG12
         With .OSC1
@@ -123,8 +131,8 @@ Public Function ReadT_EG12(ByVal sr As KDS8SyxReader) As T_EG12
             .REL = HiNib(b) 'As Byte 'Release,  'Abklingen            '0; . . .; 15;
             'b = sr.ReadByte:        Debug.Print Hex(b)
         End With
-    Debug.Print "----"
-    Debug.Print "T_EG2"
+    'Debug.Print "----"
+    'Debug.Print "T_EG2"
         With .OSC2
             'Dim b As Byte
             b = sr.ReadByte:        'Debug.Print Hex(b)
@@ -154,7 +162,7 @@ Public Function ReadT_EG12(ByVal sr As KDS8SyxReader) As T_EG12
             .KBD = HiNib(b)
         End With
     End With
-    Debug.Print "----"
+    'Debug.Print "----"
 End Function
 '
 'Tja wie ist das
@@ -190,7 +198,7 @@ End Function
 '    End With
 'End Function
 Public Function ReadA_EG12(ByVal sr As KDS8SyxReader) As A_EG12
-    Debug.Print "A_EG1"
+    'Debug.Print "A_EG1"
     Dim b As Byte
     With ReadA_EG12
         With .OSC1
@@ -206,8 +214,8 @@ Public Function ReadA_EG12(ByVal sr As KDS8SyxReader) As A_EG12
             .REL = HiNib(b)     'As Byte 'Release,  Abklingen  '0; . . .; 15;
             'Debug.Print "--"
         End With
-    Debug.Print "----"
-    Debug.Print "A_EG2"
+    'Debug.Print "----"
+    'Debug.Print "A_EG2"
         With .OSC2
             'Dim b As Byte
             b = sr.ReadByte:        'Debug.Print Hex(b)
@@ -223,7 +231,7 @@ Public Function ReadA_EG12(ByVal sr As KDS8SyxReader) As A_EG12
             'Debug.Print "--"
         End With
     End With
-    Debug.Print "----"
+    'Debug.Print "----"
 End Function
 Public Function ReadMG(ByVal sr As KDS8SyxReader) As MG 'MODULATION GENERATOR Modulationserzeuger
     With ReadMG

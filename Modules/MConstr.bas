@@ -1,9 +1,8 @@
-Attribute VB_Name = "MConstr"
+Attribute VB_Name = "MNew"
 Option Explicit
 
-Public Function New_KDS8SyxReader(ByVal FileName As String) As KDS8SyxReader
-    Set New_KDS8SyxReader = New KDS8SyxReader
-    Call New_KDS8SyxReader.New_(FileName)
+Public Function KDS8SyxReader(ByVal FileName As String) As KDS8SyxReader
+    Set KDS8SyxReader = New KDS8SyxReader: KDS8SyxReader.New_ FileName
 End Function
 
 Public Function ShR(ByVal value As Long, ByVal shifter As Byte) As Long
