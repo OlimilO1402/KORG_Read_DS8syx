@@ -1,0 +1,374 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="David">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.04 [en] (Win95; I) [Netscape]">
+   <TITLE>DS-8 MIDI Implementation</TITLE>
+</HEAD>
+<BODY>
+<TT><FONT SIZE=+2>DS-8 MIDI IMPLEMENTATION</FONT></TT>
+
+<P><I><TT>(Still under construction, Jan 1, 1998.</TT></I><TT>)</TT>
+
+<P><TT>RECOGNIZED RECEIVED DATA&nbsp;</TT>
+<BR><B><TT>Channel Messages</TT></B>
+
+<P><B><TT>System Real Time Messages</TT></B>
+
+<P><B><TT>System Exclusive Messages</TT></B>
+<BR><TT>(1) Device ID Request</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; Byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Description</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 1111 0000&nbsp;&nbsp;&nbsp; Exclusive status</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0100 0010&nbsp;&nbsp;&nbsp; Korg ID 42h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0100 nnnn&nbsp;&nbsp;&nbsp; Format ID 4nh (n=ch)</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 1111 0111&nbsp;&nbsp;&nbsp; EOX</TT>
+
+<P><TT>(2) 1 Voice Dump Request</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; Byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Description</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 1111 0000&nbsp;&nbsp;&nbsp; Exclusive status</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0100 0010&nbsp;&nbsp;&nbsp; Korg ID 42h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0011 nnnn&nbsp;&nbsp;&nbsp; Format ID 3nh (n=ch)</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0001 0011&nbsp;&nbsp;&nbsp; DS-8 ID 13h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0001 0000&nbsp;&nbsp;&nbsp; 1 voice dump request
+10h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 1111 0111&nbsp;&nbsp;&nbsp; EOX</TT>
+
+<P><TT>(3) 1 Voice Dump</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; Byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Description</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 1111 0000&nbsp;&nbsp;&nbsp; Exclusive status</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0100 0010&nbsp;&nbsp;&nbsp; Korg ID 42h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0011 nnnn&nbsp;&nbsp;&nbsp; Format ID 3nh (n=ch)</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0001 0011&nbsp;&nbsp;&nbsp; DS-8 ID 13h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0100 0000&nbsp;&nbsp;&nbsp; 1 voice dump 40h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0ddd dddd</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; .</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; .&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+1 voice data (80 bytes)</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; .</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0ddd dddd</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 1111 0111&nbsp;&nbsp;&nbsp; EOX</TT>
+
+<P><TT>(4) All Voice Dump Request</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; Byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Description</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 1111 0000&nbsp;&nbsp;&nbsp; Exclusive status</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0100 0010&nbsp;&nbsp;&nbsp; Korg ID 42h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0011 nnnn&nbsp;&nbsp;&nbsp; Format ID 3nh (n=ch)</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0001 0011&nbsp;&nbsp;&nbsp; DS-8 ID 13h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0001 1100&nbsp;&nbsp;&nbsp; All dump request
+1Ch</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 1111 0111&nbsp;&nbsp;&nbsp; EOX</TT>
+
+<P><TT>(5) All Voice Dump</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; Byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Description</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 1111 0000&nbsp;&nbsp;&nbsp; Exclusive status</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0100 0010&nbsp;&nbsp;&nbsp; Korg ID 42h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0011 nnnn&nbsp;&nbsp;&nbsp; Format ID 3nh (n=ch)</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0001 0011&nbsp;&nbsp;&nbsp; DS-8 ID 13h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0100 1100&nbsp;&nbsp;&nbsp; All voice dump 4Ch</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; .</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; .&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+All voice data (7544 bytes)</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; .</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 1111 0111&nbsp;&nbsp;&nbsp; EOX</TT>
+
+<P><TT>(6) 1 Combi Dump Request</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; Byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Description</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 1111 0000&nbsp;&nbsp;&nbsp; Exclusive status</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0100 0010&nbsp;&nbsp;&nbsp; Korg ID 42h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0011 nnnn&nbsp;&nbsp;&nbsp; Format ID 3nh (n=ch)</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0001 0011&nbsp;&nbsp;&nbsp; DS-8 ID 13h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0001 1001&nbsp;&nbsp;&nbsp; 1 Combi dump Request
+19h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 1111 0111&nbsp;&nbsp;&nbsp; EOX</TT><TT></TT>
+
+<P><TT>(7) 1 Combi Dump</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; Byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Description</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 1111 0000&nbsp;&nbsp;&nbsp; Exclusive status</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0100 0010&nbsp;&nbsp;&nbsp; Korg ID 42h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0011 nnnn&nbsp;&nbsp;&nbsp; Format ID 3nh (n=ch)</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0001 0011&nbsp;&nbsp;&nbsp; DS-8 ID 13h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0100 1001&nbsp;&nbsp;&nbsp; 1 Combi Dump 49h</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0ddd dddd</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; .</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; .&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+1 Combi data (56 bytes)</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; .</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 0ddd dddd</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp; 1111 0111&nbsp;&nbsp;&nbsp; EOX</TT><TT></TT>
+
+<P><TT>(8) All Combi Dump Request</TT>
+
+<P><TT>(9) All Combi Dump</TT>
+
+<P><TT>(10) Panel Mode Request</TT>
+
+<P><TT>(11) Panel Mode Change</TT>
+
+<P><TT>(12) Keyboard Mode Request</TT>
+
+<P><TT>(13) Keyboard Mode Change</TT>
+
+<P><TT>(14) Paramter Change</TT>
+
+<P><TT>(15) Voice Write Request</TT>
+
+<P><TT>(16) Combi Write Request</TT>
+<BR><TT>&nbsp;</TT>
+
+<P><TT>MIDI IMPLEMENTATION CHART</TT>
+<TABLE BORDER WIDTH="600" >
+<TR>
+<TD><TT>FUNCTION</TT></TD>
+
+<TD><TT>TRANSMITTED</TT></TD>
+
+<TD><TT>RECOGNIZED</TT></TD>
+
+<TD><TT>REMARKS</TT></TD>
+</TR>
+
+<TR>
+<TD><TT><U>Basic Channel</U>&nbsp;</TT>&nbsp;
+<BR><TT>Power On&nbsp;</TT>&nbsp;
+<BR><TT>Setting Range</TT></TD>
+
+<TD><TT>1 -- 16&nbsp;</TT>&nbsp;
+<BR><TT>1 -- 16</TT></TD>
+
+<TD><TT>1 -- 16&nbsp;</TT>&nbsp;
+<BR><TT>1 -- 16</TT></TD>
+
+<TD><TT>Memorized</TT></TD>
+</TR>
+
+<TR>
+<TD><TT><U>Mode</U>&nbsp;</TT>&nbsp;
+<BR><TT>Power On&nbsp;</TT>&nbsp;
+<BR><TT>Message Default</TT></TD>
+
+<TD><TT>-</TT>&nbsp;
+<BR><TT>1</TT>&nbsp;
+<BR><TT>x</TT></TD>
+
+<TD><TT>-</TT>&nbsp;
+<BR><TT>1&nbsp;</TT>&nbsp;
+<BR><TT>OMNI=On/Off</TT></TD>
+
+<TD><TT>Ignore</TT></TD>
+</TR>
+
+<TR>
+<TD><TT><U>Note Number</U>&nbsp;</TT>&nbsp;
+<BR><TT>Actual Notes</TT></TD>
+
+<TD><TT>24 -- 108&nbsp;</TT>&nbsp;
+<BR><TT>---------</TT></TD>
+
+<TD><TT>0 -- 127&nbsp;</TT>&nbsp;
+<BR><TT>24-108</TT></TD>
+
+<TD><TT>-</TT></TD>
+</TR>
+
+<TR>
+<TD><TT><U>Velocity</U>&nbsp;</TT>&nbsp;
+<BR><TT>Note On&nbsp;</TT>&nbsp;
+<BR><TT>Note Off</TT></TD>
+
+<TD><TT>-</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>x</TT></TD>
+
+<TD><TT>-</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>&nbsp;</TT></TD>
+
+<TD><TT>9n, v=1..127</TT></TD>
+</TR>
+
+<TR>
+<TD><TT><U>Aftertouch</U>&nbsp;</TT>&nbsp;
+<BR><TT>Keys&nbsp;</TT>&nbsp;
+<BR><TT>Channels</TT></TD>
+
+<TD><TT>x&nbsp;</TT>&nbsp;
+<BR><TT>o</TT></TD>
+
+<TD><TT>x&nbsp;</TT>&nbsp;
+<BR><TT>o</TT></TD>
+
+<TD><TT>-</TT></TD>
+</TR>
+
+<TR>
+<TD><TT><U>Pitch Bender</U></TT></TD>
+
+<TD><TT>o</TT></TD>
+
+<TD><TT>o</TT></TD>
+
+<TD><TT>-</TT></TD>
+</TR>
+
+<TR>
+<TD><TT><U>Control Change</U>&nbsp;</TT>&nbsp;
+<BR><TT>1&nbsp;</TT>&nbsp;
+<BR><TT>2&nbsp;</TT>&nbsp;
+<BR><TT>6&nbsp;</TT>&nbsp;
+<BR><TT>7&nbsp;</TT>&nbsp;
+<BR><TT>10&nbsp;</TT>&nbsp;
+<BR><TT>64&nbsp;</TT>&nbsp;
+<BR><TT>65&nbsp;</TT>&nbsp;
+<BR><TT>96&nbsp;</TT>&nbsp;
+<BR><TT>99</TT></TD>
+
+<TD><TT>-</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>x&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o</TT></TD>
+
+<TD><TT>-</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o</TT></TD>
+
+<TD><TT>-</TT>&nbsp;
+<BR><TT>Pitch MG*&nbsp;</TT>&nbsp;
+<BR><TT>Timbre MG*&nbsp;</TT>&nbsp;
+<BR><TT>Data entry***&nbsp;</TT>&nbsp;
+<BR><TT>Volume*&nbsp;</TT>&nbsp;
+<BR><TT>Panpot*&nbsp;</TT>&nbsp;
+<BR><TT>Damper pedal*&nbsp;</TT>&nbsp;
+<BR><TT>Porta switch*&nbsp;</TT>&nbsp;
+<BR><TT>Data increment***&nbsp;</TT>&nbsp;
+<BR><TT>Data decrement***</TT></TD>
+</TR>
+
+<TR>
+<TD><TT><U>Program Change</U> **&nbsp;</TT>&nbsp;
+<BR><TT>Actual Number</TT></TD>
+
+<TD><TT>0 -- 9&nbsp;</TT>&nbsp;
+<BR><TT>------</TT></TD>
+
+<TD><TT>0 --99&nbsp;</TT>&nbsp;
+<BR><TT>0 -- 127</TT></TD>
+
+<TD><TT>-</TT></TD>
+</TR>
+
+<TR>
+<TD><TT><U>Exclusive</U> ***</TT></TD>
+
+<TD><TT>o</TT></TD>
+
+<TD><TT>o</TT></TD>
+
+<TD><TT>voice dump, etc.</TT></TD>
+</TR>
+
+<TR>
+<TD><TT><U>Common</U>&nbsp;</TT>&nbsp;
+<BR><TT>Song positions&nbsp;</TT>&nbsp;
+<BR><TT>Song select&nbsp;</TT>&nbsp;
+<BR><TT>Tune</TT></TD>
+
+<TD><TT>-</TT>&nbsp;
+<BR><TT>x&nbsp;</TT>&nbsp;
+<BR><TT>x&nbsp;</TT>&nbsp;
+<BR><TT>x</TT></TD>
+
+<TD><TT>-</TT>&nbsp;
+<BR><TT>x&nbsp;</TT>&nbsp;
+<BR><TT>x&nbsp;</TT>&nbsp;
+<BR><TT>x</TT></TD>
+
+<TD><TT>-</TT></TD>
+</TR>
+
+<TR>
+<TD><TT><U>Real Time</U>&nbsp;</TT>&nbsp;
+<BR><TT>Clock&nbsp;</TT>&nbsp;
+<BR><TT>Command</TT></TD>
+
+<TD><TT>-</TT>&nbsp;
+<BR><TT>x&nbsp;</TT>&nbsp;
+<BR><TT>x</TT></TD>
+
+<TD><TT>-</TT>&nbsp;
+<BR><TT>x&nbsp;</TT>&nbsp;
+<BR><TT>x</TT></TD>
+
+<TD><TT>-</TT></TD>
+</TR>
+
+<TR>
+<TD><TT><U>Auxiliary</U>&nbsp;</TT>&nbsp;
+<BR><TT>Local ON/OFF&nbsp;</TT>&nbsp;
+<BR><TT>All Notes OFF&nbsp;</TT>&nbsp;
+<BR><TT>Active Sensing ****&nbsp;</TT>&nbsp;
+<BR><TT>Reset</TT></TD>
+
+<TD><TT>-</TT>&nbsp;
+<BR><TT>x&nbsp;</TT>&nbsp;
+<BR><TT>x&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>x</TT></TD>
+
+<TD><TT>-</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>o&nbsp;</TT>&nbsp;
+<BR><TT>x</TT></TD>
+
+<TD><TT>123 -- 127</TT></TD>
+</TR>
+</TABLE>
+<TT>Notes:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+o=YES, x=NO</TT>
+<BR><TT>* Transmit/Receive if CNTRL is ON in FUNCTION</TT>
+<BR><TT>** Transmit/Receive if PROG is ON in FUNCTION</TT>
+<BR><TT>*** Transmit/Receive if EXCLUSIVE is ON in FUNCTION</TT>
+<BR><TT>**** Transmit/Receive if ACT is ON in FUNCTION</TT>
+
+<P><TT>Mode 1: OMNI ON, POLY; Mode 3: OMNI ON, MONO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TT>
+<BR><TT>Mode 2: OMNI OFF, POLY; Mode 4: OMNI OFF. MONO</TT>
+</BODY>
+</HTML>
+
+<!-- <SERVICE NAME="pop"> -->
+<SCRIPT LANGUAGE="javascript">
+<!-- 
+var cuid= "10201"; var keywords= "none"; 
+// -->
+</SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="http://adforce.imgis.com/?addyn|2.0|25|13000|1|1|key=none;misc=354543852;">
+<!--
+var urlOfNewPop= "http://www.geocities.com/ad_container/pop.html?cuid="+cuid+"&keywords="+keywords; oldPop= window.open(urlOfNewPop, '_popIt', 'width=515,height=125'); if (oldPop.location.href != urlOfNewPop) {  if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 3)) { setTimeout("oldPop.close()", 750); setTimeout("window.open(urlOfNewPop, '_popIt', 'width=515,height=125')", 1700); } else { oldPop.close(); setTimeout("window.open(urlOfNewPop, '_popIt', 'width=515,height=125')", 1000); } } 
+// -->
+</SCRIPT>
+<!-- </SERVICE> -->
+<!-- <SERVICE NAME="watermark"> -->
+<DIV CLASS="GeoBranding" ID="GeoBranding" STYLE="position:absolute;top:1;visibility:hide;" ALIGN="right"><A HREF="/Avenues/Family_and_Kids/?source=watermark&browser=Netscape" TARGET="_top"><IMG SRC="http://pic.geocities.com/images/branding/geocities.gif" ALT="Click to see more great pages on Family and Kids." BORDER="0"></A><BR></DIV>
+<SCRIPT LANGUAGE="javascript1.2" SRC="/include/branding/default_ns.js">
+</SCRIPT>
+<!-- </SERVICE> -->
