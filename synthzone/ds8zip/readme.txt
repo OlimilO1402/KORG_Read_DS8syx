@@ -1,1 +1,0 @@
-This file was downloaded from http://www.sbsmedia.spb.ru
