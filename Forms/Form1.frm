@@ -4,12 +4,12 @@ Begin VB.Form Form1
    ClientHeight    =   13455
    ClientLeft      =   2325
    ClientTop       =   690
-   ClientWidth     =   8640
+   ClientWidth     =   8670
    Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
    OLEDropMode     =   1  'Manuell
    ScaleHeight     =   13455
-   ScaleWidth      =   8640
+   ScaleWidth      =   8670
    Begin VB.TextBox Text1 
       BeginProperty Font 
          Name            =   "Courier New"
@@ -75,14 +75,17 @@ Begin VB.Form Form1
    Begin VB.Image Image1 
       Height          =   480
       Left            =   8160
-      Picture         =   "Form1.frx":0CD0
+      MouseIcon       =   "Form1.frx":0CD0
+      MousePointer    =   99  'Benutzerdefiniert
+      Picture         =   "Form1.frx":159A
+      ToolTipText     =   "Click for app info"
       Top             =   0
       Width           =   480
    End
    Begin VB.Label Label2 
       Caption         =   "drag'drop *.syx files into the textbox"
       Height          =   255
-      Left            =   4080
+      Left            =   5160
       TabIndex        =   6
       Top             =   120
       Width           =   2655
@@ -104,6 +107,13 @@ Begin VB.Form Form1
       TabIndex        =   5
       Top             =   480
       Width           =   375
+   End
+   Begin VB.Menu mnuPopup 
+      Caption         =   "Popup"
+      Visible         =   0   'False
+      Begin VB.Menu mnuClear 
+         Caption         =   "Clear"
+      End
    End
 End
 Attribute VB_Name = "Form1"
@@ -258,6 +268,30 @@ Private Sub Form_Unload(Cancel As Integer)
     Set m_sr = Nothing
 End Sub
 
+Private Sub Image1_Click()
+    MsgBox App.CompanyName & " " & App.EXEName & " " & vbCrLf & _
+           App.FileDescription & vbCrLf & _
+           "v" & App.Major & "." & App.Minor & "." & App.Revision, vbInformation
+End Sub
+
+Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    If Button = vbRightButton Then
+        PopupMenu mnuPopup
+    End If
+End Sub
+
+Private Sub mnuClear_Click()
+    Set m_sr = New KDS8SyxReader
+    m_IsHeadRead = False
+    m_KDS8ProgList = MKDS8Types.ListOf_KORG_DS8_PROG_Empty
+    m_FNm = vbNullString
+    m_Err = vbNullString
+    Me.Combo1.Clear
+    Me.Text1.Text = vbNullString
+    Me.Label1.Caption = vbNullString
+    'UpdateView
+End Sub
+
 Private Sub OptClipB_Click()
     If Not m_sr Is Nothing Then UpdateView
 End Sub
@@ -278,6 +312,7 @@ Private Sub OLEDragDrop(Data As DataObject, Effect As Long) ', Button As Integer
     If Data.GetFormat(vbCFFiles) Then
         m_FNm = Data.Files(1)
         OpenSyXFile m_FNm
+        Me.Caption = "KDS8Reader" & ": [" & m_FNm & "]"
     End If
 End Sub
 Private Sub OpenSyXFile(ByVal FNm As String)
