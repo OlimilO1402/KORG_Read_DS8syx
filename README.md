@@ -1,5 +1,5 @@
 # KORG_Read_DS8syx
-## Reader of SysEx-files (\*.syx) from the old 4-Op FM-Synth Korg DS-8  
+## Reader of SysEx-files (\*.syx) for the old 4-Op FM-Synth Korg DS-8  
 
 [![GitHub](https://img.shields.io/github/license/OlimilO1402/KORG_Read_DS8syx?style=plastic)](https://github.com/OlimilO1402/KORG_Read_DS8syx/blob/master/LICENSE) 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/OlimilO1402/KORG_Read_DS8syx?style=plastic)](https://github.com/OlimilO1402/KORG_Read_DS8syx/releases/latest)
