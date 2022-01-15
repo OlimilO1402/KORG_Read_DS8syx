@@ -18,6 +18,6 @@ at one glance.
 If you love vintage gear like I do, you could take this little project as a 
 starting point for your own ideas.  
 You may also have a look at my other KORG related project:  
-https://github.com/OlimilO1402/KORG_Read_pcg  
-
-![KDS8Reader Image](Resources/Pictures/KDS8Reader.png "KDS8Reader Image")
+[KORG_Read_pcg](https://github.com/OlimilO1402/KORG_Read_pcg)  
+  
+![KDS8Reader Image](Resources/Pictures/KDS8Reader.png "KDS8Reader Image")  
